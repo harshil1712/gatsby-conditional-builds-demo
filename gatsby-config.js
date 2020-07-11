@@ -8,17 +8,17 @@ module.exports = {
   ],
   // Customize your site metadata:
   siteMetadata: {
-    title: `My Blog Title`,
-    author: `My Name`,
-    description: `My site description...`,
+    title: `Amorph's Guestbook`,
+    author: `Yash Dave`,
+    description: `A guestbook for folks visiting the website! Built to demonstrate Gatsby Conditional Builds`,
     social: [
       {
-        name: `twitter`,
-        url: `https://twitter.com/gatsbyjs`,
+        name: `Twitter`,
+        url: `https://twitter.com/amorpheuz`,
       },
       {
-        name: `github`,
-        url: `https://github.com/gatsbyjs`,
+        name: `Github`,
+        url: `https://github.com/amorpheuz`,
       },
     ],
   },
