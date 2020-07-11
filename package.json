@@ -6,6 +6,7 @@
     "develop": "gatsby develop",
     "start": "gatsby develop",
     "build": "gatsby build",
+    "build:conditional": "gatsby build --log-pages",
     "clean": "gatsby clean"
   },
   "license": "0BSD",
