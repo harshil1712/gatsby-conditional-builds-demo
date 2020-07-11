@@ -1,0 +1,67 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Gatsby Conditional Build
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ dev ]
+  pull_request:
+    branches: [ dev ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+
+    # Restore existing cache if any
+    - name: Attempt npm cache restore
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    # Runs a set of commands using the runners shell
+    - name: Install dependencies with npm
+      run: npm ci
+   
+    # Attempts restoring .cache and public folders
+    - name: Attempt gatsby cache restore
+      uses: actions/cache@v2
+      with:
+        path: |
+          ./.cache
+          ./public
+        key: ${{ runner.os }}-gatsby
+        restore-keys: |
+          ${{ runner.os }}-gatsby
+    
+    # Build Gatsby Site
+    - name: Build Gatsby site
+      run: npm run build:conditional
+      env: 
+        GATSBY_EXPERIMENTAL_PAGE_BUILD_ON_DATA_CHANGES: true
+    
+    # Push changes to master branch
+    - name: Push site build
+      run: |
+        cd public
+        git config --global user.email "connect@amorpheuz.dev"
+        git config --global user.name "Amorpheuz"
+        git init
+        git add -A
+        git commit -m "built with $GITHUB_SHA"
+        git push --force https://$USERNAME:$REPO_TOKEN@github.com/Amorpheuz/gatsby-conditional-builds-demo.git master
+      env:
+        REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        USERNAME: Amorpheuz
